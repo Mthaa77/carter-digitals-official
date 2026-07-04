@@ -7,6 +7,7 @@ import "./editorial.css";
 import "./content-upgrade.css";
 import "./21st-upgrade.css";
 import "./bounce-cards.css";
+import "./site-motion.css";
 
 export const metadata: Metadata = {
   title: "Carter Digitals | Premium Websites, Apps & Growth Systems",
