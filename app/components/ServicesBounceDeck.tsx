@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { theatreImage } from "../media";
+import { serviceVisuals } from "../service-media";
 import BounceCards from "./BounceCards";
 
 const services = [
@@ -9,40 +9,49 @@ const services = [
     title: "Signature Websites",
     tag: "PRESENCE + CONVERSION",
     eyebrow: "01 / THE DIGITAL FLAGSHIP",
-    copy: "A premium website that makes the business feel established, explains the value quickly and gives serious visitors a clear reason to act.",
+    image: serviceVisuals.signature,
+    signal: "Make the first ten seconds count.",
+    copy: "A flagship website that does more than look premium. It gives the right visitor immediate clarity: what you do, why it matters, why they can trust you and exactly what to do next.",
     outcomes: ["High-conviction homepage", "Mobile-first customer journey", "Clear calls to action"],
   },
   {
     title: "Lead Engines",
     tag: "CAMPAIGNS + ENQUIRIES",
     eyebrow: "02 / THE DEMAND LAYER",
-    copy: "Focused landing pages and conversion journeys built to turn attention into calls, bookings, WhatsApps and qualified sales conversations.",
+    image: serviceVisuals.leads,
+    signal: "Turn attention into a real conversation.",
+    copy: "Focused landing pages, offer structures and enquiry journeys designed to turn traffic into calls, bookings, WhatsApps and serious sales conversations without sending people through a confusing maze.",
     outcomes: ["Offer-first landing page", "Trust and proof structure", "Enquiry capture flow"],
   },
   {
     title: "Web Applications",
     tag: "PRODUCT + PLATFORM",
     eyebrow: "03 / THE USER EXPERIENCE",
-    copy: "Custom portals and web platforms that give customers, teams or members a simpler way to get important work done.",
+    image: serviceVisuals.applications,
+    signal: "Give users a better way to get work done.",
+    copy: "Custom portals and web platforms that turn a complex customer, member or team task into a clear, intuitive digital experience people actually want to use.",
     outcomes: ["Purposeful product UX", "Role-based experiences", "Scalable technical foundation"],
   },
   {
     title: "Business Systems",
     tag: "OPERATIONS + CLARITY",
     eyebrow: "04 / THE OPERATING LAYER",
-    copy: "Dashboards, workflows and internal tools that turn fragmented operations into clearer visibility, quicker action and less repeat admin.",
+    image: serviceVisuals.systems,
+    signal: "Make the moving parts easier to see.",
+    copy: "Dashboards, workflows and internal tools that replace scattered admin with sharper visibility, faster follow-up and a more reliable way to move work forward.",
     outcomes: ["Lead and client visibility", "Smarter workflows", "Decision-ready dashboards"],
   },
   {
     title: "AI-Ready Growth",
     tag: "AUTOMATION + ADVANTAGE",
     eyebrow: "05 / THE NEXT ADVANTAGE",
-    copy: "A modern digital foundation ready for automation, intelligent assistance and the next services your business will need to deliver.",
+    image: serviceVisuals.ai,
+    signal: "Build the foundation for what comes next.",
+    copy: "A modern digital foundation ready for meaningful automation, intelligent assistance and new customer experiences as the business earns the right to scale.",
     outcomes: ["Automation-ready workflows", "AI-enabled service ideas", "Cloud-ready architecture"],
   },
 ];
 
-const cardImages = services.map(() => theatreImage);
 const transforms = [
   "rotate(-8deg) translate(-212px, 20px)",
   "rotate(-4deg) translate(-106px, -2px)",
@@ -58,18 +67,19 @@ export function ServicesBounceDeck() {
   return (
     <section className="services-bounce-section" id="services-deck">
       <div className="services-bounce-grid" />
+      <div className="services-bounce-glow glow-one" /><div className="services-bounce-glow glow-two" />
       <div className="shell services-bounce-layout">
         <div className="services-bounce-intro">
           <p className="eyebrow light">THE CARTER CAPABILITIES DECK</p>
           <h2>Choose the layer that moves your business <em>forward.</em></h2>
-          <p>Every service is a different route to the same result: make the business easier to trust, easier to choose and easier to grow.</p>
-          <div className="services-bounce-note"><span>HOVER A CARD</span><i /> <span>EXPLORE THE BUILD</span></div>
+          <p>From first impression to operational advantage, each Carter capability is built around a specific business outcome — not a vague list of deliverables.</p>
+          <div className="services-bounce-note"><span>HOVER OR TAP A CARD</span><i /> <span>EXPLORE THE BUILD</span></div>
         </div>
 
         <div className="services-bounce-stage">
           <BounceCards
             className="carter-bounce-cards"
-            images={cardImages}
+            images={services.map((item) => item.image)}
             labels={services.map((item) => item.title)}
             tags={services.map((item) => item.tag)}
             containerWidth={600}
@@ -84,12 +94,9 @@ export function ServicesBounceDeck() {
           />
         </div>
 
-        <article className="services-bounce-detail" aria-live="polite">
-          <p className="eyebrow">{service.eyebrow}</p>
-          <h3>{service.title}</h3>
-          <p>{service.copy}</p>
-          <div className="services-bounce-outcomes">{service.outcomes.map((outcome) => <span key={outcome}>✦ {outcome}</span>)}</div>
-          <a href={`mailto:hello@carterdigitals.co.za?subject=${encodeURIComponent(`${service.title} enquiry`)}`}>Talk through this build <b>↗</b></a>
+        <article className="services-bounce-detail" key={service.title} aria-live="polite">
+          <div><p className="eyebrow">{service.eyebrow}</p><h3>{service.title}</h3><span className="services-bounce-signal">{service.signal}</span></div>
+          <div className="services-bounce-detail-copy"><p>{service.copy}</p><div className="services-bounce-outcomes">{service.outcomes.map((outcome) => <span key={outcome}>✦ {outcome}</span>)}</div><a href={`mailto:hello@carterdigitals.co.za?subject=${encodeURIComponent(`${service.title} enquiry`)}`}>Talk through this build <b>↗</b></a></div>
         </article>
       </div>
     </section>
