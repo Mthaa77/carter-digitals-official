@@ -5,6 +5,7 @@ import "./cinematic.css";
 import "./laptop-hero.css";
 import "./editorial.css";
 import "./content-upgrade.css";
+import "./21st-upgrade.css";
 
 export const metadata: Metadata = {
   title: "Carter Digitals | Premium Websites, Apps & Growth Systems",
