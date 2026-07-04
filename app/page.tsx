@@ -1,12 +1,9 @@
-import { Fragment } from "react";
-import { LaptopHeroOverlay } from "./components/laptop-hero";
 import { HomeExperience } from "./home-experience";
+import { Welcome } from "./welcome";
 
 export default function Home() {
-  return (
-    <Fragment>
-      <HomeExperience />
-      <LaptopHeroOverlay />
-    </Fragment>
-  );
+  return <>
+    <Welcome />
+    <HomeExperience />
+  </>;
 }
