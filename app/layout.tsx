@@ -2,9 +2,18 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Carter Digitals | The Digital Proof Engine",
+  title: "Carter Digitals | Premium Websites, Apps & Growth Systems",
   description:
-    "Premium websites, web applications and digital growth systems for ambitious businesses.",
+    "Carter Digitals is a founder-led Pretoria digital studio by Kabelo Kadiaka. We build premium websites, web applications, lead experiences and practical growth systems for ambitious businesses.",
+  keywords: [
+    "Carter Digitals",
+    "Kabelo Kadiaka",
+    "Pretoria web design",
+    "Gauteng website development",
+    "web applications South Africa",
+    "business systems",
+    "digital growth studio",
+  ],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
