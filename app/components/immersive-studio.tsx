@@ -1,6 +1,7 @@
 "use client";
 
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { PointerEvent as ReactPointerEvent, ReactNode } from "react";
 import { brandLockup } from "../brand";
 
 type StartHandler = (project?: string) => void;
@@ -35,7 +36,7 @@ export function Reveal({ children, className = "" }: RevealProps) {
 export function TiltCard({ children, className = "" }: { children: ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  function onMove(event: React.PointerEvent<HTMLDivElement>) {
+  function onMove(event: ReactPointerEvent<HTMLDivElement>) {
     const card = ref.current;
     if (!card || event.pointerType === "touch") return;
     const bounds = card.getBoundingClientRect();
@@ -60,7 +61,7 @@ export function TiltCard({ children, className = "" }: { children: ReactNode; cl
 export function CarterCore() {
   const ref = useRef<HTMLDivElement>(null);
 
-  function onMove(event: React.PointerEvent<HTMLDivElement>) {
+  function onMove(event: ReactPointerEvent<HTMLDivElement>) {
     const scene = ref.current;
     if (!scene || event.pointerType === "touch") return;
     const bounds = scene.getBoundingClientRect();
