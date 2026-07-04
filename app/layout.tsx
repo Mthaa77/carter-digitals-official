@@ -3,6 +3,7 @@ import "./globals.css";
 import "./immersive.css";
 import "./cinematic.css";
 import "./laptop-hero.css";
+import "./editorial.css";
 
 export const metadata: Metadata = {
   title: "Carter Digitals | Premium Websites, Apps & Growth Systems",
