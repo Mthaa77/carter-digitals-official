@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./immersive.css";
+import "./cinematic.css";
 
 export const metadata: Metadata = {
   title: "Carter Digitals | Premium Websites, Apps & Growth Systems",
