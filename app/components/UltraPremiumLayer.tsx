@@ -107,14 +107,14 @@ export function ProofReel({ onStart }: ProofReelProps) {
       <div className="section-shell">
         <div className="proof-reel-heading">
           <div>
-            <span className="index">04 / SELECTED SYSTEMS</span>
+            <span className="index">04 / SIGNATURE SYSTEM DIRECTIONS</span>
             <h2>Design that does more than<br /><em>look expensive.</em></h2>
           </div>
-          <p>Every Carter build is designed around an operational outcome: trust, clarity, speed, conversion or control. Select a system to explore the thinking behind it.</p>
+          <p>Every Carter build is designed around an operational outcome: trust, clarity, speed, conversion or control. Explore a system direction to see the thinking underneath it.</p>
         </div>
 
         <div className="proof-reel-layout">
-          <div className="proof-tabs" role="tablist" aria-label="Selected Carter systems">
+          <div className="proof-tabs" role="tablist" aria-label="Carter system directions">
             {selectedBuilds.map((build, index) => (
               <button
                 key={build.id}
@@ -131,7 +131,7 @@ export function ProofReel({ onStart }: ProofReelProps) {
           </div>
 
           <article className={`proof-terminal theme-${active.theme}`}>
-            <div className="terminal-topline"><span>SELECTED BUILD / {active.number}</span><b><i /> SYSTEM VIEW</b></div>
+            <div className="terminal-topline"><span>SYSTEM DIRECTION / {active.number}</span><b><i /> CONCEPT VIEW</b></div>
             <div className="proof-terminal-content">
               <div className="proof-copy">
                 <span className="proof-kicker">{active.stageLabel}</span>
@@ -144,7 +144,7 @@ export function ProofReel({ onStart }: ProofReelProps) {
 
               <div className="proof-interface" aria-label={`${active.stageLabel} concept interface`}>
                 <div className="interface-glow" />
-                <div className="interface-toolbar"><span /><span /><span /><b>{active.stageLabel}</b><i>LIVE</i></div>
+                <div className="interface-toolbar"><span /><span /><span /><b>{active.stageLabel}</b><i>CONCEPT</i></div>
                 <div className="interface-sidebar"><b>CD</b><span /><span /><span /><span /></div>
                 <div className="interface-main">
                   <div className="interface-hero"><small>PRIMARY ROUTE</small><strong>{active.interface[0]}</strong><span>Built for a clearer next action.</span><i>→</i></div>
