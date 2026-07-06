@@ -1,27 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import "./immersive.css";
-import "./cinematic.css";
-import "./laptop-hero.css";
-import "./editorial.css";
-import "./content-upgrade.css";
-import "./21st-upgrade.css";
-import "./bounce-cards.css";
-import "./site-motion.css";
 
 export const metadata: Metadata = {
-  title: "Carter Digitals | Premium Websites, Apps & Growth Systems",
-  description:
-    "Carter Digitals is a founder-led Pretoria digital studio by Kabelo Kadiaka. We build premium websites, web applications, lead experiences and practical growth systems for ambitious businesses.",
-  keywords: [
-    "Carter Digitals",
-    "Kabelo Kadiaka",
-    "Pretoria web design",
-    "Gauteng website development",
-    "web applications South Africa",
-    "business systems",
-    "digital growth studio",
-  ],
+  title: "Carter Digitals | Built Different. Built African. Built to Win.",
+  description: "Carter Digitals is a Pretoria digital studio building premium websites, bespoke web applications, business tools and AI-enabled growth systems.",
+  keywords: ["Carter Digitals", "Pretoria web design", "South African web applications", "business automation", "digital studio", "Kabelo Kadiaka"],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
