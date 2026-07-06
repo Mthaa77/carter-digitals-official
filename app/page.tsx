@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { BlueprintResultLink, ExperienceEnhancements, ProofReel } from "./components/UltraPremiumLayer";
 
 const goals = [
   {
@@ -152,6 +153,8 @@ const modules = [
   "Reporting takes too long",
 ];
 
+const timelines = ["Ready to start now", "Within 30 days", "Planning the right route", "I need a prototype first"];
+
 const phases = [
   ["01", "Discover & Align", "Map outcomes, stakeholders, technical constraints and success before a line of code is written."],
   ["02", "Architecture & Wireflow", "Design the information hierarchy, user journeys and system shape before building begins."],
@@ -177,10 +180,30 @@ export default function Home() {
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
   const [briefOpen, setBriefOpen] = useState(false);
   const [briefStep, setBriefStep] = useState(0);
+  const [timeline, setTimeline] = useState(timelines[2]);
 
   const activeGoal = goals[goalIndex];
   const activeIndustry = industries[industryIndex];
   const activePlan = plans[planIndex];
+
+  useEffect(() => {
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setBriefOpen(false);
+    };
+
+    window.addEventListener("keydown", onEscape);
+    return () => window.removeEventListener("keydown", onEscape);
+  }, []);
+
+  useEffect(() => {
+    if (!briefOpen) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [briefOpen]);
+
   const architecture = useMemo(() => {
     const base = ["Lead capture", "Client workspace", "Operations view"];
     if (selectedModules.some((item) => item.includes("WhatsApp"))) base.unshift("WhatsApp routing");
@@ -195,18 +218,25 @@ export default function Home() {
     setSelectedModules((current) => current.includes(module) ? current.filter((item) => item !== module) : [...current, module]);
   };
 
+  const openBrief = () => {
+    setBriefStep(0);
+    setBriefOpen(true);
+  };
+
   return (
     <main>
+      <ExperienceEnhancements />
+
       <header className="site-header">
         <a className="brand" href="#top" aria-label="Carter Digitals home"><Mark /><span>CARTER<br /><b>DIGITALS</b></span></a>
         <nav aria-label="Primary navigation">
           <a href="#systems">What we build</a>
+          <a href="#work">Selected systems</a>
           <a href="#industries">Industries</a>
           <a href="#packages">Packages</a>
           <a href="#process">Delivery</a>
-          <a href="#studio">Studio</a>
         </nav>
-        <button className="nav-cta" onClick={() => { setBriefStep(0); setBriefOpen(true); }}>Start a project <span>↗</span></button>
+        <button className="nav-cta" onClick={openBrief}>Start a project <span>↗</span></button>
       </header>
 
       <section id="top" className="hero-section">
@@ -218,7 +248,7 @@ export default function Home() {
           <h1>Your business does not need another website.<br /><em>It needs a system that brings in work.</em></h1>
           <p>Carter Digitals builds high-performance websites, bespoke web applications, internal business tools and AI-enabled systems for ambitious South African institutions.</p>
           <div className="hero-actions">
-            <button className="primary-button" onClick={() => { setBriefStep(0); setBriefOpen(true); }}>Build my digital blueprint <span>→</span></button>
+            <button className="primary-button" onClick={openBrief}>Build my digital blueprint <span>→</span></button>
             <a className="ghost-button" href="#systems">Explore what we build <span>↓</span></a>
           </div>
           <div className="hero-proof"><span><b>100%</b> Black-owned</span><span><b>Level 1</b> B-BBEE</span><span><b>Built in</b> South Africa</span></div>
@@ -241,7 +271,7 @@ export default function Home() {
         <div className="router-layout">
           <div className="route-list">
             {goals.map((goal, index) => (
-              <button key={goal.label} className={goalIndex === index ? "route-option active" : "route-option"} onClick={() => setGoalIndex(index)}>
+              <button key={goal.label} aria-pressed={goalIndex === index} className={goalIndex === index ? "route-option active" : "route-option"} onClick={() => setGoalIndex(index)}>
                 <span>0{index + 1}</span><strong>{goal.label}</strong><i>↗</i>
               </button>
             ))}
@@ -252,13 +282,12 @@ export default function Home() {
             <h3>{activeGoal.signal}</h3>
             <p>{activeGoal.copy}</p>
             <div className="route-flow">{activeGoal.route.split(" → ").map((node, index) => <span key={node}>{node}{index < activeGoal.route.split(" → ").length - 1 && <b>→</b>}</span>)}</div>
-            <button className="inline-button" onClick={() => { setBriefStep(0); setBriefOpen(true); }}>Turn this into my project brief <span>↗</span></button>
+            <button className="inline-button" onClick={openBrief}>Turn this into my project brief <span>↗</span></button>
           </div>
         </div>
       </section>
 
       <section id="industries" className="industry-section">
-        <div className="industry-aurora" />
         <div className="section-shell">
           <div className="section-intro section-intro-light">
             <span className="index">02 / DIGITAL TERRAIN</span>
@@ -268,7 +297,7 @@ export default function Home() {
           <div className="terrain-wrap">
             <div className="terrain-map" aria-label="Industry selector">
               <div className="terrain-lines"><i /><i /><i /><i /><i /><i /></div>
-              {industries.map((industry, index) => <button key={industry.id} onClick={() => setIndustryIndex(index)} className={industryIndex === index ? `terrain-node node-${index} active` : `terrain-node node-${index}`}><span>{industry.code}</span><b>{industry.title}</b></button>)}
+              {industries.map((industry, index) => <button key={industry.id} aria-pressed={industryIndex === index} onClick={() => setIndustryIndex(index)} className={industryIndex === index ? `terrain-node node-${index} active` : `terrain-node node-${index}`}><span>{industry.code}</span><b>{industry.title}</b></button>)}
               <div className="terrain-pulse" />
             </div>
             <article className="industry-brief">
@@ -277,7 +306,7 @@ export default function Home() {
               <div className="brief-block"><small>THE PRESSURE</small><p>{activeIndustry.challenge}</p></div>
               <div className="brief-block"><small>THE SYSTEM</small><p>{activeIndustry.system}</p></div>
               <div className="brief-block outcome"><small>THE OUTCOME</small><p>{activeIndustry.outcome}</p></div>
-              <button onClick={() => { setBriefStep(0); setBriefOpen(true); }} className="brief-cta">Build for this industry <span>→</span></button>
+              <button onClick={openBrief} className="brief-cta">Build for this industry <span>→</span></button>
             </article>
           </div>
         </div>
@@ -299,17 +328,19 @@ export default function Home() {
         </div>
       </section>
 
+      <ProofReel onStart={openBrief} />
+
       <section id="packages" className="packages-section">
         <div className="section-shell">
           <div className="section-intro section-intro-light package-intro">
-            <span className="index">04 / GROWTH ELEVATOR</span>
+            <span className="index">05 / GROWTH ELEVATOR</span>
             <h2>Choose your<br /><em>growth level.</em></h2>
             <p>Not a generic price list. A clear route from presence to a fully managed digital engine.</p>
           </div>
           <div className="elevator-layout">
             <div className="elevator-shaft">
               <div className="shaft-line" />
-              {plans.map((plan, index) => <button key={plan.id} className={planIndex === index ? "floor-button active" : "floor-button"} onClick={() => setPlanIndex(index)}><span>{plan.number}</span><b>{plan.title}</b><small>{index === 1 ? "MOST CHOSEN" : ""}</small></button>)}
+              {plans.map((plan, index) => <button key={plan.id} aria-pressed={planIndex === index} className={planIndex === index ? "floor-button active" : "floor-button"} onClick={() => setPlanIndex(index)}><span>{plan.number}</span><b>{plan.title}</b><small>{index === 1 ? "MOST CHOSEN" : ""}</small></button>)}
               <div className="lift-car" style={{ top: `${26 + planIndex * 31}%` }}><span>YOU ARE HERE</span></div>
             </div>
             <article className="package-panel">
@@ -319,7 +350,7 @@ export default function Home() {
               <div className="price"><span>FROM</span><strong>{activePlan.price}</strong><small>once-off</small></div>
               <p>{activePlan.note}</p>
               <ul>{activePlan.features.map((feature) => <li key={feature}><i>✦</i>{feature}</li>)}</ul>
-              <button onClick={() => { setBriefStep(0); setBriefOpen(true); }} className="primary-button">Choose {activePlan.title} <span>→</span></button>
+              <button onClick={openBrief} className="primary-button">Choose {activePlan.title} <span>→</span></button>
             </article>
           </div>
         </div>
@@ -327,19 +358,19 @@ export default function Home() {
 
       <section className="builder-section section-shell">
         <div className="section-intro">
-          <span className="index">05 / BESPOKE SYSTEM BUILDER</span>
+          <span className="index">06 / BESPOKE SYSTEM BUILDER</span>
           <h2>Describe the problem.<br /><em>See the system taking shape.</em></h2>
         </div>
         <div className="builder-layout">
           <div className="module-bank">
             <p>Select the business pressure points that sound familiar.</p>
-            <div className="module-grid">{modules.map((module) => <button key={module} onClick={() => toggleModule(module)} className={selectedModules.includes(module) ? "module-chip active" : "module-chip"}><span>{selectedModules.includes(module) ? "✓" : "+"}</span>{module}</button>)}</div>
+            <div className="module-grid">{modules.map((module) => <button key={module} aria-pressed={selectedModules.includes(module)} onClick={() => toggleModule(module)} className={selectedModules.includes(module) ? "module-chip active" : "module-chip"}><span>{selectedModules.includes(module) ? "✓" : "+"}</span>{module}</button>)}</div>
           </div>
           <div className="architecture-panel">
             <div className="architecture-top"><span>YOUR POSSIBLE SYSTEM</span><small>{selectedModules.length || "0"} pressure points mapped</small></div>
             <div className="architecture-flow">{architecture.map((item, index) => <div className="architecture-node" key={item}><span>{String(index + 1).padStart(2, "0")}</span><b>{item}</b>{index < architecture.length - 1 && <i>↓</i>}</div>)}</div>
             <p>{selectedModules.length ? "This is the beginning of a connected digital operating system—not another off-the-shelf template." : "Choose a few pressure points and we will map a potential system architecture here."}</p>
-            <button onClick={() => { setBriefStep(0); setBriefOpen(true); }} className="inline-button">Turn this into a real brief <span>↗</span></button>
+            <button onClick={openBrief} className="inline-button">Turn this into a real brief <span>↗</span></button>
           </div>
         </div>
       </section>
@@ -347,7 +378,7 @@ export default function Home() {
       <section id="process" className="process-section">
         <div className="section-shell">
           <div className="section-intro section-intro-light">
-            <span className="index">06 / FROM SIGNAL TO LAUNCH</span>
+            <span className="index">07 / FROM SIGNAL TO LAUNCH</span>
             <h2>A disciplined route.<br /><em>Not a mystery process.</em></h2>
           </div>
           <div className="phase-track">{phases.map(([number, title, body], index) => <article className={index === 2 ? "phase active" : "phase"} key={number}><div className="phase-dot"><span>{number}</span></div><h3>{title}</h3><p>{body}</p></article>)}</div>
@@ -355,7 +386,7 @@ export default function Home() {
       </section>
 
       <section className="vault-section section-shell">
-        <div className="vault-copy"><span className="index">07 / CREDENTIAL VAULT</span><h2>Credentials that<br /><em>open doors.</em></h2><p>Structured to work with serious clients, institutional buyers and organisations that need confidence before commitment.</p></div>
+        <div className="vault-copy"><span className="index">08 / CREDENTIAL VAULT</span><h2>Credentials that<br /><em>open doors.</em></h2><p>Structured to work with serious clients, institutional buyers and organisations that need confidence before commitment.</p></div>
         <div className="credential-vault">
           <article className="credential credential-primary"><span>VERIFIED STATUS</span><strong>LEVEL 1</strong><b>B-BBEE CONTRIBUTOR</b><small>135% procurement recognition</small></article>
           <article className="credential"><span>OWNERSHIP</span><strong>100%</strong><b>BLACK + YOUTH OWNED</b><small>South African enterprise</small></article>
@@ -367,16 +398,49 @@ export default function Home() {
       <section id="studio" className="studio-section">
         <div className="section-shell studio-grid">
           <div className="portrait-frame"><div className="portrait-glow" /><div className="portrait-monogram">KK</div><span>FOUNDER / DIRECTOR</span><small>PRETORIA, SOUTH AFRICA</small></div>
-          <div className="studio-copy"><span className="index">08 / THE STUDIO</span><h2>AI-augmented.<br />Human-driven.<br /><em>Built to deliver.</em></h2><p>Carter Digitals is founder-led by Kabelo Kadiaka—combining product thinking, full-stack development, cloud capability and practical AI systems to turn strong ideas into working digital infrastructure.</p><div className="capability-cloud"><span>Next.js</span><span>React</span><span>Python / FastAPI</span><span>GCP / Vertex AI</span><span>PostgreSQL</span><span>Sanity CMS</span><span>WhatsApp API</span><span>Automation</span></div><blockquote>“Capability over credentials. Outcomes over promises.”</blockquote></div>
+          <div className="studio-copy"><span className="index">09 / THE STUDIO</span><h2>AI-augmented.<br />Human-driven.<br /><em>Built to deliver.</em></h2><p>Carter Digitals is founder-led by Kabelo Kadiaka—combining product thinking, full-stack development, cloud capability and practical AI systems to turn strong ideas into working digital infrastructure.</p><div className="capability-cloud"><span>Next.js</span><span>React</span><span>Python / FastAPI</span><span>GCP / Vertex AI</span><span>PostgreSQL</span><span>Sanity CMS</span><span>WhatsApp API</span><span>Automation</span></div><blockquote>“Capability over credentials. Outcomes over promises.”</blockquote></div>
         </div>
       </section>
 
       <section className="final-section">
         <div className="final-grid" />
-        <div className="section-shell final-inner"><span className="index">READY WHEN YOU ARE</span><h2>Let&apos;s build something<br /><em>that works for you.</em></h2><p>Start with a guided brief, send a WhatsApp message, or explore the right route for your business. No pressure—just clarity.</p><div className="final-actions"><button className="primary-button" onClick={() => { setBriefStep(0); setBriefOpen(true); }}>Start a blueprint <span>→</span></button><a href="https://wa.me/27724026893" className="whatsapp-button">Send a WhatsApp <span>↗</span></a></div><div className="footer-line"><span>© 2026 Carter Digitals (Pty) Ltd</span><span>Built Different. Built African. Built to Win.</span><span>Soshanguve, Pretoria</span></div></div>
+        <div className="section-shell final-inner"><span className="index">READY WHEN YOU ARE</span><h2>Let&apos;s build something<br /><em>that works for you.</em></h2><p>Start with a guided brief, send a WhatsApp message, or explore the right route for your business. No pressure—just clarity.</p><div className="final-actions"><button className="primary-button" onClick={openBrief}>Start a blueprint <span>→</span></button><a href="https://wa.me/27724026893" className="whatsapp-button">Send a WhatsApp <span>↗</span></a></div><div className="footer-line"><span>© 2026 Carter Digitals (Pty) Ltd</span><span>Built Different. Built African. Built to Win.</span><span>Soshanguve, Pretoria</span></div></div>
       </section>
 
-      {briefOpen && <div className="brief-modal" role="dialog" aria-modal="true" aria-label="Start a project brief"><button aria-label="Close project brief" className="modal-close" onClick={() => setBriefOpen(false)}>×</button><div className="brief-progress">{[0,1,2,3].map((item) => <i className={item <= briefStep ? "active" : ""} key={item} />)}</div>{briefStep === 0 && <><span className="index">PROJECT BLUEPRINT / 01</span><h2>What would make this project successful?</h2><div className="modal-options">{goals.map((goal, index) => <button key={goal.label} onClick={() => { setGoalIndex(index); setBriefStep(1); }}>{goal.label}<span>→</span></button>)}</div></>}{briefStep === 1 && <><span className="index">PROJECT BLUEPRINT / 02</span><h2>What type of organisation are we building for?</h2><div className="modal-options compact">{industries.map((industry, index) => <button key={industry.id} onClick={() => { setIndustryIndex(index); setBriefStep(2); }}>{industry.title}<span>→</span></button>)}</div></>}{briefStep === 2 && <><span className="index">PROJECT BLUEPRINT / 03</span><h2>How soon are you looking to move?</h2><div className="modal-options compact">{["Ready to start now", "Within 30 days", "Planning the right route", "I need a prototype first"].map((item) => <button key={item} onClick={() => setBriefStep(3)}>{item}<span>→</span></button>)}</div></>}{briefStep === 3 && <div className="brief-complete"><span className="success-mark">✓</span><span className="index">PROJECT BLUEPRINT CAPTURED</span><h2>Your route is taking shape.</h2><p>Recommended direction: <b>{activeGoal.signal}</b> for <b>{activeIndustry.title}</b>.</p><div className="brief-code">CD-2026-PTA-084</div><a className="primary-button" href="mailto:kabelokadiaka4@gmail.com?subject=Carter%20Digitals%20Project%20Blueprint">Send my project brief <span>→</span></a></div>}</div>}
+      {briefOpen && (
+        <div className="brief-modal" role="dialog" aria-modal="true" aria-label="Start a project brief">
+          <button aria-label="Close project brief" className="modal-close" onClick={() => setBriefOpen(false)}>×</button>
+          <div className="brief-progress">{[0, 1, 2, 3].map((item) => <i className={item <= briefStep ? "active" : ""} key={item} />)}</div>
+
+          {briefStep === 0 && <>
+            <span className="index">PROJECT BLUEPRINT / 01</span>
+            <h2>What would make this project successful?</h2>
+            <div className="modal-options">{goals.map((goal, index) => <button key={goal.label} onClick={() => { setGoalIndex(index); setBriefStep(1); }}>{goal.label}<span>→</span></button>)}</div>
+          </>}
+
+          {briefStep === 1 && <>
+            <span className="index">PROJECT BLUEPRINT / 02</span>
+            <h2>What type of organisation are we building for?</h2>
+            <div className="modal-options compact">{industries.map((industry, index) => <button key={industry.id} onClick={() => { setIndustryIndex(index); setBriefStep(2); }}>{industry.title}<span>→</span></button>)}</div>
+          </>}
+
+          {briefStep === 2 && <>
+            <span className="index">PROJECT BLUEPRINT / 03</span>
+            <h2>How soon are you looking to move?</h2>
+            <div className="modal-options compact">{timelines.map((item) => <button key={item} onClick={() => { setTimeline(item); setBriefStep(3); }}>{item}<span>→</span></button>)}</div>
+          </>}
+
+          {briefStep === 3 && <div className="brief-complete">
+            <span className="success-mark">✓</span>
+            <span className="index">PROJECT BLUEPRINT CAPTURED</span>
+            <h2>Your route is taking shape.</h2>
+            <p>Recommended direction: <b>{activeGoal.signal}</b> for <b>{activeIndustry.title}</b>.</p>
+            <div className="brief-summary"><span>START WINDOW</span><b>{timeline}</b></div>
+            <div className="brief-code">CD-2026-PTA-084</div>
+            <BlueprintResultLink goal={activeGoal.label} signal={activeGoal.signal} industry={activeIndustry.title} modules={selectedModules} />
+          </div>}
+        </div>
+      )}
     </main>
   );
 }
